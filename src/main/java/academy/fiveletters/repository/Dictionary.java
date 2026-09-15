@@ -8,8 +8,7 @@ import java.util.Scanner;
 
 public final class Dictionary {
 
-    private Dictionary() {
-    }
+    private Dictionary() {}
 
     public static final List<String> WORDS = loadWords();
 
