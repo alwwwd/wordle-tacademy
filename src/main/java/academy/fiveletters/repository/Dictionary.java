@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public final class Dictionary {
+    private static final int WORD_LENGTH = 5;
 
     private Dictionary() {}
 
@@ -26,7 +27,7 @@ public final class Dictionary {
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine().trim();
-            if (!line.isEmpty() && !line.startsWith("#")) {
+            if (!line.isEmpty() && !line.startsWith("#") && line.length() == WORD_LENGTH ) {
                 words.add(line);
             }
         }
