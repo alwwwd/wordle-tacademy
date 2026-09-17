@@ -27,7 +27,7 @@ public final class Dictionary {
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine().trim();
-            if (!line.isEmpty() && !line.startsWith("#") && line.length() == WORD_LENGTH ) {
+            if (!line.isEmpty() && !line.startsWith("#") && line.length() == WORD_LENGTH) {
                 words.add(line);
             }
         }

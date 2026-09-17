@@ -1,12 +1,12 @@
 package academy.fiveletters.mandatory.mr1;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import academy.fiveletters.data.GameSession;
 import academy.fiveletters.repository.Dictionary;
 import academy.fiveletters.service.GameService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Обязательные тесты: одинаковый seed обязан давать одинаковое загаданное слово. */
 @DisplayName("MR1. Воспроизводимость по seed")

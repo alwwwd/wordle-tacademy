@@ -1,11 +1,10 @@
 package academy.fiveletters.data;
 
-import academy.fiveletters.enums.GameStatus;
+import static academy.fiveletters.enums.GameStatus.IN_PROGRESS;
 
+import academy.fiveletters.enums.GameStatus;
 import java.util.ArrayList;
 import java.util.List;
-
-import static academy.fiveletters.enums.GameStatus.IN_PROGRESS;
 
 public class GameSession {
     private static final int WORD_LENGTH = 5;

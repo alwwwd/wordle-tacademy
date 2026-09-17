@@ -1,15 +1,14 @@
 package academy.fiveletters.mandatory.mr1;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import academy.fiveletters.repository.Dictionary;
 import academy.fiveletters.service.GameService;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Обязательные тесты: словарь. */
 @DisplayName("MR1. Словарь")
