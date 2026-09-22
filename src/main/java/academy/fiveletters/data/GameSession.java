@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameSession {
-    private static final int WORD_LENGTH = 5;
-
     private final String answer;
     private final int maxAttempts;
     private int attemptsUsed = 0;
@@ -16,16 +14,9 @@ public class GameSession {
     private GameStatus status;
 
     public GameSession(String answer, int maxAttempts) {
-        if (answer == null || answer.length() != WORD_LENGTH) {
-            throw new IllegalArgumentException("Ответ должен состоять из 5 букв");
-        }
-
-        if (maxAttempts <= 0) {
-            throw new IllegalArgumentException("Количество попыток должно быть больше 0");
-        }
-
         this.answer = answer;
         this.maxAttempts = maxAttempts;
+        this.attemptsUsed = 0;
         this.attemptsHistory = new ArrayList<>();
         this.status = IN_PROGRESS;
     }
@@ -50,9 +41,18 @@ public class GameSession {
         return status;
     }
 
-    public void setStatus(GameStatus status) {
-        if (this.status == IN_PROGRESS) {
-            this.status = status;
+    public void registerValidGuess(String guess) {
+        if (status != GameStatus.IN_PROGRESS) {
+            throw new IllegalStateException("Игра уже завершена");
+        }
+
+        attemptsHistory.add(guess);
+        attemptsUsed++;
+
+        if (guess.equals(answer)) {
+            status = GameStatus.WIN;
+        } else if (attemptsUsed >= maxAttempts) {
+            status = GameStatus.LOSE;
         }
     }
 }
