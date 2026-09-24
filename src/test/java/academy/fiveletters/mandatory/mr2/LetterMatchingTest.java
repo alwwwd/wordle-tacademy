@@ -27,6 +27,7 @@ class LetterMatchingTest {
     }
 
     @Test
+    @Disabled("MR2: реализуй тест и удали эту строку")
     @DisplayName("Полное совпадение: загадано \"озеро\", ввод \"озеро\" -> ✅✅✅✅✅")
     void exactMatch() {
         GameSession session = new GameSession("озеро", 6);
