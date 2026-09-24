@@ -1,7 +1,6 @@
 package academy.fiveletters.mandatory.mr2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import academy.fiveletters.data.GameSession;
 import academy.fiveletters.data.GuessResult;
 import academy.fiveletters.enums.GameStatus;
@@ -27,7 +26,6 @@ class LetterMatchingTest {
     }
 
     @Test
-    @Disabled("MR2: реализуй тест и удали эту строку")
     @DisplayName("Полное совпадение: загадано \"озеро\", ввод \"озеро\" -> ✅✅✅✅✅")
     void exactMatch() {
         GameSession session = new GameSession("озеро", 6);
