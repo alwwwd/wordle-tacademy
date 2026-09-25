@@ -1,8 +1,11 @@
 package academy.fiveletters.mandatory.mr2;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.Disabled;
+import academy.fiveletters.data.GameSession;
+import academy.fiveletters.data.GuessResult;
+import academy.fiveletters.service.GameService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,38 +17,55 @@ class GuessValidationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"дом", "домики", ""})
-    @Disabled("MR2: реализуй тест и удали эту строку")
     @DisplayName("Слово не из 5 букв отклоняется: \"{0}\"")
     void wordOfWrongLengthIsRejected(String guess) {
-        fail("Тест не реализован");
+        GameSession session = new GameSession("сорок", 6);
+
+        assertThrows(IllegalArgumentException.class, () -> GameService.applyGuess(session, guess));
+
+        assertEquals(0, session.getAttemptsUsed());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"дом12", "дом!!", "до ма"})
-    @Disabled("MR2: реализуй тест и удали эту строку")
     @DisplayName("Ввод с не-буквами отклоняется: \"{0}\"")
     void nonLetterInputIsRejected(String guess) {
-        fail("Тест не реализован");
+        GameSession session = new GameSession("сорок", 6);
+
+        assertThrows(IllegalArgumentException.class, () -> GameService.applyGuess(session, guess));
+
+        assertEquals(0, session.getAttemptsUsed());
     }
 
     @Test
-    @Disabled("MR2: реализуй тест и удали эту строку")
     @DisplayName("Слово, которого нет в словаре, отклоняется")
     void wordOutsideDictionaryIsRejected() {
-        fail("Тест не реализован");
+        GameSession session = new GameSession("ыыыыы", 6);
+
+        assertThrows(IllegalArgumentException.class, () -> GameService.applyGuess(session, "ыыыыы"));
+
+        assertEquals(0, session.getAttemptsUsed());
     }
 
     @Test
-    @Disabled("MR2: реализуй тест и удали эту строку")
     @DisplayName("Некорректный ввод не тратит попытку")
     void invalidInputDoesNotConsumeAttempt() {
-        fail("Тест не реализован");
+        GameSession session = new GameSession("сорок", 6);
+
+        assertThrows(IllegalArgumentException.class, () -> GameService.applyGuess(session, "сор"));
+
+        assertEquals(0, session.getAttemptsUsed());
     }
 
     @Test
-    @Disabled("MR2: реализуй тест и удали эту строку")
     @DisplayName("Ввод не зависит от регистра: \"ОЗЕРО\" и \"озеро\" обрабатываются одинаково")
     void inputIsCaseInsensitive() {
-        fail("Тест не реализован");
+
+        GameSession session = new GameSession("сорок", 6);
+        GuessResult result = GameService.applyGuess(session, "ОЗЕРО");
+
+        assertEquals("озеро", result.getGuess());
+        assertEquals("озеро", session.getAttemptsHistory().get(0));
+        assertEquals(1, session.getAttemptsUsed());
     }
 }
