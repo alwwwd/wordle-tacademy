@@ -38,8 +38,7 @@ public final class GameService {
 
         session.registerValidGuess(normalizedGuess);
 
-       String answer =
-                session.getStatus() == GameStatus.LOSE ? session.getAnswer() : null;
+        String answer = session.getStatus() == GameStatus.LOSE ? session.getAnswer() : null;
 
         return new GuessResult(normalizedGuess, result, session.getStatus(), answer);
     }
