@@ -1,6 +1,7 @@
 package academy.fiveletters.mandatory.mr2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import academy.fiveletters.data.GameSession;
 import academy.fiveletters.data.GuessResult;
 import academy.fiveletters.enums.GameStatus;
