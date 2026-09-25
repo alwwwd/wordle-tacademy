@@ -7,6 +7,7 @@ import academy.fiveletters.repository.Dictionary;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Random;
 
 public final class GameService {
@@ -38,7 +39,8 @@ public final class GameService {
 
         session.registerValidGuess(normalizedGuess);
 
-        String answer = session.getStatus() == GameStatus.LOSE ? session.getAnswer() : null;
+        Optional<String> answer =
+                session.getStatus() == GameStatus.LOSE ? Optional.of(session.getAnswer()) : Optional.empty();
 
         return new GuessResult(normalizedGuess, result, session.getStatus(), answer);
     }
