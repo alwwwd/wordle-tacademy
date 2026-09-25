@@ -1,15 +1,14 @@
 package academy.fiveletters.data;
 
 import academy.fiveletters.enums.GameStatus;
-import java.util.Optional;
 
 public class GuessResult {
     private final String guess;
     private final String result;
     private final GameStatus status;
-    private final Optional<String> answer;
+    private final String answer;
 
-    public GuessResult(String guess, String result, GameStatus status, Optional<String> answer) {
+    public GuessResult(String guess, String result, GameStatus status, String answer) {
         this.guess = guess;
         this.result = result;
         this.status = status;
@@ -28,7 +27,7 @@ public class GuessResult {
         return status;
     }
 
-    public Optional<String> getAnswer() {
+    public String getAnswer() {
         return answer;
     }
 }
