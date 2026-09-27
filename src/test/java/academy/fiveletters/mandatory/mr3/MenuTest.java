@@ -1,8 +1,8 @@
-package academy.fiveletters;
-
+package academy.fiveletters.mandatory.mr3;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import academy.fiveletters.ConsoleApp;
 import academy.fiveletters.repository.Dictionary;
 import academy.fiveletters.service.GameService;
 import academy.fiveletters.support.CliRunner;
