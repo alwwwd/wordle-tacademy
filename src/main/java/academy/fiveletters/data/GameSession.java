@@ -9,7 +9,7 @@ import java.util.List;
 public class GameSession {
     private final String answer;
     private final int maxAttempts;
-    private int attemptsUsed = 0;
+    private int attemptsUsed;
     private final List<String> attemptsHistory;
     private GameStatus status;
     private final List<String> dictionary;
