@@ -34,7 +34,7 @@ class GameOutcomeTest {
 
         assertEquals(GameStatus.LOSE, result.getStatus());
         assertEquals(GameStatus.LOSE, session.getStatus());
-        assertEquals("сорок", result.getAnswer().get());
+        assertEquals("сорок", session.getAnswer());
         assertEquals(1, session.getAttemptsUsed());
     }
 
