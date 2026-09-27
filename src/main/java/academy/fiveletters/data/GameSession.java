@@ -12,13 +12,15 @@ public class GameSession {
     private int attemptsUsed = 0;
     private final List<String> attemptsHistory;
     private GameStatus status;
+    private final List<String> dictionary;
 
-    public GameSession(String answer, int maxAttempts) {
+    public GameSession(String answer, int maxAttempts, List<String> dictionary) {
         this.answer = answer;
         this.maxAttempts = maxAttempts;
         this.attemptsUsed = 0;
         this.attemptsHistory = new ArrayList<>();
         this.status = IN_PROGRESS;
+        this.dictionary = dictionary;
     }
 
     public String getAnswer() {
@@ -54,5 +56,9 @@ public class GameSession {
         } else if (attemptsUsed >= maxAttempts) {
             status = GameStatus.LOSE;
         }
+    }
+
+    public List<String> getDictionary() {
+        return dictionary;
     }
 }
