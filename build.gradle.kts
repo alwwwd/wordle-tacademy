@@ -56,7 +56,7 @@ dependencies {
     testRuntimeOnly(libs.junit.platform.launcher)
 
     // Раскомментируй, если понадобится:
-    // implementation(libs.picocli)                       // разбор аргументов CLI
+     implementation(libs.picocli)                       // разбор аргументов CLI
     // implementation(platform(libs.jackson.bom))         // JSON
     // implementation(libs.bundles.jackson)
     // testImplementation(platform(libs.mockito.bom))     // моки
