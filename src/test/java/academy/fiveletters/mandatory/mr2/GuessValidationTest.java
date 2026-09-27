@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import academy.fiveletters.data.GameSession;
 import academy.fiveletters.data.GuessResult;
+import academy.fiveletters.repository.Dictionary;
 import academy.fiveletters.service.GameService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class GuessValidationTest {
     @ValueSource(strings = {"дом", "домики", ""})
     @DisplayName("Слово не из 5 букв отклоняется: \"{0}\"")
     void wordOfWrongLengthIsRejected(String guess) {
-        GameSession session = new GameSession("сорок", 6);
+        GameSession session = new GameSession("сорок", 6, Dictionary.WORDS);
 
         assertThrows(IllegalArgumentException.class, () -> GameService.applyGuess(session, guess));
 
@@ -30,7 +31,7 @@ class GuessValidationTest {
     @ValueSource(strings = {"дом12", "дом!!", "до ма"})
     @DisplayName("Ввод с не-буквами отклоняется: \"{0}\"")
     void nonLetterInputIsRejected(String guess) {
-        GameSession session = new GameSession("сорок", 6);
+        GameSession session = new GameSession("сорок", 6, Dictionary.WORDS);
 
         assertThrows(IllegalArgumentException.class, () -> GameService.applyGuess(session, guess));
 
@@ -40,7 +41,7 @@ class GuessValidationTest {
     @Test
     @DisplayName("Слово, которого нет в словаре, отклоняется")
     void wordOutsideDictionaryIsRejected() {
-        GameSession session = new GameSession("ыыыыы", 6);
+        GameSession session = new GameSession("ыыыыы", 6, Dictionary.WORDS);
 
         assertThrows(IllegalArgumentException.class, () -> GameService.applyGuess(session, "ыыыыы"));
 
@@ -50,7 +51,7 @@ class GuessValidationTest {
     @Test
     @DisplayName("Некорректный ввод не тратит попытку")
     void invalidInputDoesNotConsumeAttempt() {
-        GameSession session = new GameSession("сорок", 6);
+        GameSession session = new GameSession("сорок", 6, Dictionary.WORDS);
 
         assertThrows(IllegalArgumentException.class, () -> GameService.applyGuess(session, "сор"));
 
@@ -61,7 +62,7 @@ class GuessValidationTest {
     @DisplayName("Ввод не зависит от регистра: \"ОЗЕРО\" и \"озеро\" обрабатываются одинаково")
     void inputIsCaseInsensitive() {
 
-        GameSession session = new GameSession("сорок", 6);
+        GameSession session = new GameSession("сорок", 6, Dictionary.WORDS);
         GuessResult result = GameService.applyGuess(session, "ОЗЕРО");
 
         assertEquals("озеро", result.getGuess());
