@@ -19,12 +19,16 @@ public final class ConsoleApp implements Runnable {
     // Цвета текста
     private static final String YELLOW = "\033[0;33m";
     private static final String GREEN = "\u001B[32m";
-    private static final  String RED = "\u001B[31m";
+    private static final String RED = "\u001B[31m";
     private static final int MAX_ATTEMPTS = 6;
 
     @Nullable
     @Option(names = "--seed", description = "Начальное значение генератора случайных чисел")
     private Long seed;
+
+    @Nullable
+    @Option(names = "--replay", description = "Список попыток через запятую")
+    private String replay;
 
     private final Scanner scanner;
     private final List<String> dictionary;
@@ -38,18 +42,28 @@ public final class ConsoleApp implements Runnable {
     public void run() {
         long currentSeed = seed != null ? seed : System.nanoTime();
 
+        if (replay != null) {
+            replayGame(currentSeed, replay);
+            return;
+        }
+
         while (true) {
             printMenu();
 
             String choice = scanner.nextLine();
 
             switch (choice) {
-                case "1"-> {
+                case "1" -> {
                     currentSeed = playGame(currentSeed);
-                    return; }
-                case "2" -> {System.out.println("До свидания!");
-                    return;}
-                default -> {System.out.println("Некорректный выбор. Введите 1 или 2."); }
+                    return;
+                }
+                case "2" -> {
+                    System.out.println("До свидания!");
+                    return;
+                }
+                default -> {
+                    System.out.println("Некорректный выбор. Введите 1 или 2.");
+                }
             }
         }
     }
@@ -86,20 +100,44 @@ public final class ConsoleApp implements Runnable {
     }
 
     private void printResult(GuessResult result, GameSession session) {
+        int remainingAttempts = session.getMaxAttempts() - session.getAttemptsUsed();
+
         System.out.println();
         System.out.println(result.getResult() + " " + result.getGuess());
 
-        System.out.println("Осталось попыток: " + (session.getMaxAttempts() - session.getAttemptsUsed()));
+        System.out.println("Осталось попыток: " + remainingAttempts);
 
         switch (result.getStatus()) {
-            case GameStatus.WIN -> { printColor("Победа! Слово угадано за " + session.getAttemptsUsed() + " попытки", GREEN);}
+            case GameStatus.WIN -> {
+                printColor("Победа! Слово угадано за " + session.getAttemptsUsed() + " попытки", GREEN);
+            }
             case GameStatus.LOSE -> {
-                printColor("Неудача. Загаданное слово: " + result.getAnswer().get(), RED);
+                printColor("Неудача. Загаданное слово: " + session.getAnswer(), RED);
             }
             case GameStatus.IN_PROGRESS -> {}
         }
 
         System.out.println();
+    }
+
+    private void replayGame(long currentSeed, String replay) {
+        GameSession session = GameService.startGame(dictionary, MAX_ATTEMPTS, currentSeed);
+
+        String[] guesses = replay.split(",");
+
+        for (String guess : guesses) {
+            if (session.getStatus() != GameStatus.IN_PROGRESS) {
+                break;
+            }
+
+            try {
+                GuessResult result = GameService.applyGuess(session, guess.trim());
+
+                printResult(result, session);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     public static void printColor(String text, String color) {
