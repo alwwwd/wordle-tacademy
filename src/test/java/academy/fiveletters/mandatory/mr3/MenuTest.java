@@ -1,7 +1,11 @@
 package academy.fiveletters;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import academy.fiveletters.repository.Dictionary;
+import academy.fiveletters.service.GameService;
+import academy.fiveletters.support.CliRunner;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -55,17 +59,24 @@ class MenuTest {
         String result = output.toString(StandardCharsets.UTF_8);
         int gamesPlayed = result.split("Новая игра!", -1).length - 1;
 
-        assertTrue(result.contains("Новая игра!"));
+        assertTrue(result.contains("До свидания!"), "После партий меню должно вернуться и принять выход");
+        assertTrue(gamesPlayed >= 2, "Должно быть сыграно 2 партии, а сыграно: " + gamesPlayed);
     }
 
     @Test
     @DisplayName("Детерминированный режим даёт предсказуемый вывод для автопроверки")
     void deterministicModeProducesPredictableOutput() {
-        System.setIn(input("2\n"));
+        long seed = 42L;
+        String answer = GameService.startGame(Dictionary.WORDS, 6, seed).getAnswer();
+        String replay = "арбуз,озеро," + answer;
 
-        ConsoleApp app = new ConsoleApp();
+        CliRunner.Result first = CliRunner.run("--seed", Long.toString(seed), "--replay", replay);
+        CliRunner.Result second = CliRunner.run("--seed", Long.toString(seed), "--replay", replay);
 
-        assertTrue(app != null);
+        assertEquals(0, first.exitCode(), () -> "Программа упала вместо честного завершения:%n%s".formatted(first));
+        assertEquals(
+                first.stdout(), second.stdout(), "Одинаковый seed и список попыток обязаны давать одинаковый вывод");
+        assertTrue(first.stdout().contains("Победа"), "Последней попыткой должно быть угадано загаданное слово");
     }
 
     private static ByteArrayInputStream input(String value) {
