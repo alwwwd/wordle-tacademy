@@ -53,6 +53,7 @@ class MenuTest {
         new ConsoleApp().run();
 
         String result = output.toString(StandardCharsets.UTF_8);
+        int gamesPlayed = result.split("Новая игра!", -1).length - 1;
 
         assertTrue(result.contains("Новая игра!"));
     }
