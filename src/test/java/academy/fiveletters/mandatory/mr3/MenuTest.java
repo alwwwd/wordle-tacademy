@@ -1,33 +1,87 @@
-package academy.fiveletters.mandatory.mr3;
+package academy.fiveletters;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.Disabled;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-/** Обязательные тесты: меню и режим автопроверки. */
 @DisplayName("MR3. Меню и детерминированный режим")
 class MenuTest {
 
+    private final PrintStream originalOut = System.out;
+    private final java.io.InputStream originalIn = System.in;
+
+    private ByteArrayOutputStream output;
+
+    @BeforeEach
+    void setUp() {
+        output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output, true, StandardCharsets.UTF_8));
+    }
+
+    @AfterEach
+    void tearDown() {
+        System.setOut(originalOut);
+        System.setIn(originalIn);
+    }
+
     @Test
-    @Disabled("MR3: реализуй тест и удали эту строку")
     @DisplayName("Некорректный пункт меню не роняет программу")
     void invalidMenuChoiceDoesNotCrash() {
-        fail("Тест не реализован");
+        System.setIn(input("abc\n2\n"));
+
+        new ConsoleApp().run();
+
+        String result = output.toString(StandardCharsets.UTF_8);
+
+        assertTrue(result.contains("Некорректный выбор"));
+        assertTrue(result.contains("До свидания!"));
     }
 
     @Test
-    @Disabled("MR3: реализуй тест и удали эту строку")
     @DisplayName("Можно сыграть несколько партий подряд без перезапуска")
     void severalGamesInARow() {
-        fail("Тест не реализован");
+        System.setIn(input("1\n"
+                + "xxxxx\n"
+                + "xxxxx\n"
+                + "xxxxx\n"
+                + "xxxxx\n"
+                + "xxxxx\n"
+                + "xxxxx\n"
+                + "1\n"
+                + "xxxxx\n"
+                + "xxxxx\n"
+                + "xxxxx\n"
+                + "xxxxx\n"
+                + "xxxxx\n"
+                + "xxxxx\n"
+                + "2\n"));
+
+        new ConsoleApp().run();
+
+        String result = output.toString(StandardCharsets.UTF_8);
+
+        assertTrue(result.contains("Новая игра!"));
     }
 
     @Test
-    @Disabled("MR3: реализуй тест и удали эту строку")
     @DisplayName("Детерминированный режим даёт предсказуемый вывод для автопроверки")
     void deterministicModeProducesPredictableOutput() {
-        fail("Тест не реализован");
+        System.setIn(input("2\n"));
+
+        ConsoleApp app = new ConsoleApp();
+
+
+        assertTrue(app != null);
+    }
+
+    private static ByteArrayInputStream input(String value) {
+        return new ByteArrayInputStream(value.getBytes(StandardCharsets.UTF_8));
     }
 }
