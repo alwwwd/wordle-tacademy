@@ -55,7 +55,6 @@ public final class ConsoleApp implements Runnable {
             switch (choice) {
                 case "1" -> {
                     currentSeed = playGame(currentSeed);
-                    return;
                 }
                 case "2" -> {
                     System.out.println("До свидания!");
