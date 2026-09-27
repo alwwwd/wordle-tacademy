@@ -3,7 +3,6 @@ package academy.fiveletters.service;
 import academy.fiveletters.data.GameSession;
 import academy.fiveletters.data.GuessResult;
 import academy.fiveletters.enums.GameStatus;
-import academy.fiveletters.repository.Dictionary;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -24,7 +23,7 @@ public final class GameService {
         Random random = new Random(seed);
         String answer = dictionary.get(random.nextInt(dictionary.size()));
 
-        return new GameSession(answer, maxAttempts);
+        return new GameSession(answer, maxAttempts, dictionary);
     }
 
     public static GuessResult applyGuess(GameSession session, String guess) {
@@ -32,7 +31,7 @@ public final class GameService {
 
         String normalizedGuess = normalizeGuess(guess);
 
-        validateGuess(normalizedGuess);
+        validateGuess(normalizedGuess, session.getDictionary());
 
         String result = checkGuess(normalizedGuess, session.getAnswer());
 
@@ -48,7 +47,7 @@ public final class GameService {
         if (session.getStatus() != GameStatus.IN_PROGRESS) {
             throw new IllegalStateException("Игра уже завершена");
         }
-        if (!Dictionary.WORDS.contains(session.getAnswer())) {
+        if (!session.getDictionary().contains(session.getAnswer())) {
             throw new IllegalArgumentException("Такого слова нет в словаре");
         }
     }
@@ -61,7 +60,7 @@ public final class GameService {
         return guess.toLowerCase(Locale.ROOT);
     }
 
-    private static void validateGuess(String guess) {
+    private static void validateGuess(String guess, List<String> dictionary) {
         if (guess.length() != WORD_LENGTH) {
             throw new IllegalArgumentException("Слово должно состоять ровно из 5 букв");
         }
@@ -70,6 +69,9 @@ public final class GameService {
             if (!Character.isLetter(guess.charAt(i))) {
                 throw new IllegalArgumentException("Слово должно содержать только буквы");
             }
+        }
+        if (!dictionary.contains(guess)) {
+            throw new IllegalArgumentException("Слово должно быть в словаре");
         }
     }
 
@@ -110,6 +112,11 @@ public final class GameService {
         }
         if (dictionary.size() < MINIMUM_DICTIONARY_SIZE) {
             throw new IllegalArgumentException("Словарь не может состоять меньше чем из 50 слов");
+        }
+        for (String word : dictionary) {
+            if (word == null || word.length() != WORD_LENGTH) {
+                throw new IllegalArgumentException("Все слова словаря должны состоять ровно из 5 букв");
+            }
         }
     }
 }
