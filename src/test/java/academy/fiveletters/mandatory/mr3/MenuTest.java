@@ -47,21 +47,8 @@ class MenuTest {
     @Test
     @DisplayName("Можно сыграть несколько партий подряд без перезапуска")
     void severalGamesInARow() {
-        System.setIn(input("1\n"
-                + "xxxxx\n"
-                + "xxxxx\n"
-                + "xxxxx\n"
-                + "xxxxx\n"
-                + "xxxxx\n"
-                + "xxxxx\n"
-                + "1\n"
-                + "xxxxx\n"
-                + "xxxxx\n"
-                + "xxxxx\n"
-                + "xxxxx\n"
-                + "xxxxx\n"
-                + "xxxxx\n"
-                + "2\n"));
+        String wrongGuesses = "арбуз\nбалет\nбанан\nбагаж\nбазар\nаллея\n";
+        System.setIn(input("1\n" + wrongGuesses + "1\n" + wrongGuesses + "2\n"));
 
         new ConsoleApp().run();
 
