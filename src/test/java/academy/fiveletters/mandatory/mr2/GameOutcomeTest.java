@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import academy.fiveletters.data.GameSession;
 import academy.fiveletters.data.GuessResult;
 import academy.fiveletters.enums.GameStatus;
+import academy.fiveletters.repository.Dictionary;
 import academy.fiveletters.service.GameService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class GameOutcomeTest {
     @Test
     @DisplayName("Угаданное слово переводит сессию в статус WIN")
     void correctGuessWinsTheGame() {
-        GameSession session = new GameSession("сорок", 3);
+        GameSession session = new GameSession("сорок", 3, Dictionary.WORDS);
 
         GuessResult result = GameService.applyGuess(session, "сорок");
 
@@ -29,23 +30,26 @@ class GameOutcomeTest {
     @Test
     @DisplayName("После 6 неудачных попыток сессия переходит в статус LOSE")
     void sixFailedAttemptsLoseTheGame() {
-        GameSession session = new GameSession("сорок", 1);
-        GuessResult result = GameService.applyGuess(session, "ааааа");
+        GameSession session = new GameSession("сорок", 6, Dictionary.WORDS);
+        for (int i = 0; i < 5; i++) {
+            GameService.applyGuess(session, "гроза");
+        }
+        GuessResult result = GameService.applyGuess(session, "гроза");
 
         assertEquals(GameStatus.LOSE, result.getStatus());
         assertEquals(GameStatus.LOSE, session.getStatus());
         assertEquals("сорок", session.getAnswer());
-        assertEquals(1, session.getAttemptsUsed());
+        assertEquals(6, session.getAttemptsUsed());
     }
 
     @Test
     @DisplayName("При поражении показывается загаданное слово")
     void answerIsRevealedOnLoss() {
-        GameSession session = new GameSession("сорок", 6);
+        GameSession session = new GameSession("сорок", 6, Dictionary.WORDS);
         for (int i = 0; i < 5; i++) {
-            GameService.applyGuess(session, "тбанк");
+            GameService.applyGuess(session, "гроза");
         }
-        GuessResult result = GameService.applyGuess(session, "тбанк");
+        GuessResult result = GameService.applyGuess(session, "гроза");
         assertEquals(GameStatus.LOSE, result.getStatus());
         assertEquals(GameStatus.LOSE, session.getStatus());
         assertEquals(6, session.getAttemptsUsed());
@@ -54,7 +58,7 @@ class GameOutcomeTest {
     @Test
     @DisplayName("Завершённая партия больше не принимает попытки")
     void finishedGameRejectsFurtherGuesses() {
-        GameSession session = new GameSession("сорок", 6);
+        GameSession session = new GameSession("сорок", 6, Dictionary.WORDS);
         GameService.applyGuess(session, "сорок");
 
         assertThrows(IllegalStateException.class, () -> GameService.applyGuess(session, "арбуз"));
