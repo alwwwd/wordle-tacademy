@@ -77,7 +77,6 @@ class MenuTest {
 
         ConsoleApp app = new ConsoleApp();
 
-
         assertTrue(app != null);
     }
 
